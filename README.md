@@ -5,6 +5,8 @@
 スライドはこちら
 http://www.slideshare.net/Ogibayashi/20130215-fluentd-esper2
 
+十分テストをしているわけではないので、環境などによっては動かないかも知れないです. その場合は教えてください.
+
 # Environment #
 
 以下の環境で動作確認しています.
