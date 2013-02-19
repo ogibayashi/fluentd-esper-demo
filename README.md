@@ -18,40 +18,39 @@ http://www.slideshare.net/Ogibayashi/20130215-fluentd-esper2
 
 1. ZMQ publish pluginのインストール
 
-`
-git clone https://github.com/ogibayashi/fluent-plugin-zmq-pub.git
-cd fluent-plugin-zmq-pub
-rake build
-fluent-gem install zmq
-fluent-gem install ./pkg/fluent-plugin-zmq-pub-0.0.1.gem --local
-`
+    git clone https://github.com/ogibayashi/fluent-plugin-zmq-pub.git
+    cd fluent-plugin-zmq-pub
+    rake build
+    fluent-gem install zmq
+    fluent-gem install ./pkg/fluent-plugin-zmq-pub-0.0.1.gem --local
+
 
 2. fluentd.confの設定. 
 
 以下はapacheのaccesslogをin_tailで読み込み、ZeroMQにpublish, Esperの出力は"view.**"というtagでfluentdに飛ばされる場合の例です.
 
-`<source>
-  type forward
-</source>
+    <source>
+      type forward
+    </source>
+    
+    <source>
+      type tail
+      path /var/log/apache2/access_log
+      tag apache.access
+      format apache
+    </source>
+    
+    <match apache.access>
+      type zmq_pub
+      pubkey <%tag%>
+      bindaddr tcp://*:5556
+      flush_interval 1s
+    </match> 
+    
+    <match view.**>
+      type stdout
+    </match>
 
-<source>
-  type tail
-  path /var/log/apache2/access_log
-  tag apache.access
-  format apache
-</source>
-
-<match apache.access>
-  type zmq_pub
-  pubkey <%tag%>
-  bindaddr tcp://*:5556
-  flush_interval 1s
-</match> 
-
-<match view.**>
-  type stdout
-</match>
-`
 
 ## Esper ##
 
@@ -80,22 +79,22 @@ mvn package
 * java.library.pathはjzmqのライブラリパスを指定
 * コマンドライン引数(この場合はapache.access)は本プログラムがfluentdの出力をsubscribeする際のキー. 上記設定の場合、tagと合わせる.
 
-`cd fluentd-esper-demo
-java -Djava.library.path=/usr/local/lib -jar target/fluentd-esper-demo-1.0-SNAPSHOT-jar-with-dependencies.jar apache.access 
-`
+    cd fluentd-esper-demo
+    java -Djava.library.path=/usr/local/lib -jar target/fluentd-esper-demo-1.0-SNAPSHOT-jar-with-dependencies.jar apache.access 
+
 
 3. クエリの発行
 
 src/main/scripts以下にサンプルのクライアントとEPLファイルがあります. クライアントからは、クエリの登録、参照、削除ができます.
 
-`cd src/main/scripts
-# クエリの登録
-./testclient.rb  count_by_code.epl 
-# 登録されているクエリの一覧表示
-./testclient.rb -s 
-# クエリの削除
-./testclient.rb -d count_by_code.epl  
-`
+    cd src/main/scripts
+    # クエリの登録
+    ./testclient.rb  count_by_code.epl 
+    # 登録されているクエリの一覧表示
+    ./testclient.rb -s 
+    # クエリの削除
+    ./testclient.rb -d count_by_code.epl  
+
 
 出力は、view.<eplファイル名>というタグでfluentdに送られ、上記設定の場合はfluentdの標準出力に出力されます.
 
