@@ -16,7 +16,7 @@ http://www.slideshare.net/Ogibayashi/20130215-fluentd-esper2
 
 ## fluentd ##
 
-1. ZMQ publish pluginのインストール
+* ZMQ publish pluginのインストール
 
     git clone https://github.com/ogibayashi/fluent-plugin-zmq-pub.git
     cd fluent-plugin-zmq-pub
@@ -25,7 +25,7 @@ http://www.slideshare.net/Ogibayashi/20130215-fluentd-esper2
     fluent-gem install ./pkg/fluent-plugin-zmq-pub-0.0.1.gem --local
 
 
-2. fluentd.confの設定. 
+* fluentd.confの設定. 
 
 以下はapacheのaccesslogをin_tailで読み込み、ZeroMQにpublish, Esperの出力は"view.**"というtagでfluentdに飛ばされる場合の例です.
 
@@ -54,27 +54,26 @@ http://www.slideshare.net/Ogibayashi/20130215-fluentd-esper2
 
 ## Esper ##
 
-1. jzmqのインストール
+* jzmqのインストール
 
 https://github.com/zeromq/jzmq
 
 よりインストール.
-
 MacOS+Homebrewの場合の注意点は以下参照
 http://stackoverflow.com/questions/3522248/how-do-i-compile-jzmq-for-zeromq-on-osx
 
-2. デモプログラムのビルド
+* デモプログラムのビルド
 
-`git clone https://github.com/ogibayashi/fluentd-esper-demo.git
-mvn package
-`
+    git clone https://github.com/ogibayashi/fluentd-esper-demo.git
+    mvn package
+
 # Running demo #
 
-1. fluentdの起動
+* fluentdの起動
 
 `$ fluentd`
 
-2. デモプログラムの起動
+* デモプログラムの起動
 
 * java.library.pathはjzmqのライブラリパスを指定
 * コマンドライン引数(この場合はapache.access)は本プログラムがfluentdの出力をsubscribeする際のキー. 上記設定の場合、tagと合わせる.
@@ -83,7 +82,7 @@ mvn package
     java -Djava.library.path=/usr/local/lib -jar target/fluentd-esper-demo-1.0-SNAPSHOT-jar-with-dependencies.jar apache.access 
 
 
-3. クエリの発行
+* クエリの発行
 
 src/main/scripts以下にサンプルのクライアントとEPLファイルがあります. クライアントからは、クエリの登録、参照、削除ができます.
 
