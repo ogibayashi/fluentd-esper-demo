@@ -18,12 +18,13 @@ http://www.slideshare.net/Ogibayashi/20130215-fluentd-esper2
 
 * ZMQ publish pluginのインストール
 
-    git clone https://github.com/ogibayashi/fluent-plugin-zmq-pub.git
-    cd fluent-plugin-zmq-pub
-    rake build
-    fluent-gem install zmq
-    fluent-gem install ./pkg/fluent-plugin-zmq-pub-0.0.1.gem --local
-
+```
+git clone https://github.com/ogibayashi/fluent-plugin-zmq-pub.git
+cd fluent-plugin-zmq-pub
+rake build
+fluent-gem install zmq
+fluent-gem install ./pkg/fluent-plugin-zmq-pub-0.0.1.gem --local
+```
 
 * fluentd.confの設定. 
 
@@ -56,31 +57,33 @@ http://www.slideshare.net/Ogibayashi/20130215-fluentd-esper2
 
 * jzmqのインストール
 
-https://github.com/zeromq/jzmq
-
-よりインストール.
+https://github.com/zeromq/jzmq よりインストール.
 MacOS+Homebrewの場合の注意点は以下参照
 http://stackoverflow.com/questions/3522248/how-do-i-compile-jzmq-for-zeromq-on-osx
 
 * デモプログラムのビルド
 
-    git clone https://github.com/ogibayashi/fluentd-esper-demo.git
-    mvn package
+```
+git clone https://github.com/ogibayashi/fluentd-esper-demo.git
+mvn package
+```
 
 # Running demo #
 
 * fluentdの起動
 
-`$ fluentd`
+```
+$ fluentd
+```
 
 * デモプログラムの起動
+  * java.library.pathはjzmqのライブラリパスを指定
+  * コマンドライン引数(この場合はapache.access)は本プログラムがfluentdの出力をsubscribeする際のキー. 上記設定の場合、tagと合わせる.
 
-* java.library.pathはjzmqのライブラリパスを指定
-* コマンドライン引数(この場合はapache.access)は本プログラムがfluentdの出力をsubscribeする際のキー. 上記設定の場合、tagと合わせる.
-
-    cd fluentd-esper-demo
-    java -Djava.library.path=/usr/local/lib -jar target/fluentd-esper-demo-1.0-SNAPSHOT-jar-with-dependencies.jar apache.access 
-
+```
+cd fluentd-esper-demo
+java -Djava.library.path=/usr/local/lib -jar target/fluentd-esper-demo-1.0-SNAPSHOT-jar-with-dependencies.jar apache.access 
+```
 
 * クエリの発行
 
