@@ -1,0 +1,1 @@
+select tag?, path, count(*) as count from apache_access.win:time_batch(5 sec) group by tag?, path order by count(*) desc
