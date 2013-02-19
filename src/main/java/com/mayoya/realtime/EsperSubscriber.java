@@ -64,16 +64,12 @@ public class EsperSubscriber {
 	svr.start();
 	while(true){
 	    if ((msgByte = subscriber.recv(ZMQ.NOBLOCK)) != null) {
-		//		System.out.println(msgByte);
 		Unpacker unpacker = msgpack.createBufferUnpacker(getMessage(msgByte));
 		List<Value> valueList = unpacker.read(listTmpl);
-		//		for(Value v: valueList){
 		String tag = valueList.get(0).asRawValue().getString();
 		String eventName = tag.replace(".","_");
-		//		System.out.println(tag);
 		Value record = valueList.get(2);
 		if(record.isMapValue()){
-		    //System.out.println(record);
 		    Map<String, String> m = new Converter(record).read(mapTmpl);
 		    m.put("tag",tag);
 		    try{
