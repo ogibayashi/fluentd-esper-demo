@@ -23,6 +23,7 @@ import java.util.Set;
 import java.io.IOException;
 import org.msgpack.template.Templates;
 import java.util.Properties;
+import org.msgpack.unpacker.BufferUnpacker;
 
 
 public class EsperSubscriber {
@@ -62,9 +63,10 @@ public class EsperSubscriber {
         byte[] msgByte;
 
 	svr.start();
+	BufferUnpacker unpacker = msgpack.createBufferUnpacker();
 	while(true){
 	    if ((msgByte = subscriber.recv(ZMQ.NOBLOCK)) != null) {
-		Unpacker unpacker = msgpack.createBufferUnpacker(getMessage(msgByte));
+		unpacker.feed(getMessage(msgByte));
 		List<Value> valueList = unpacker.read(listTmpl);
 		String tag = valueList.get(0).asRawValue().getString();
 		String eventName = tag.replace(".","_");
@@ -79,10 +81,12 @@ public class EsperSubscriber {
 		    }
 		}
 	    }
-	    try {
-		Thread.sleep(100);
-	    }catch(Exception e){
-		e.printStackTrace();
+	    else {
+		try {
+		    Thread.sleep(100);
+		}catch(Exception e){
+		    e.printStackTrace();
+		}
 	    }
 	}
 	
