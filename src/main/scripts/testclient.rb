@@ -9,6 +9,7 @@ ARGV.options {|opt|
   opt.on('-s', 'List statements.'){|v| OPTS[:statement] =  v }
   opt.on('-d VAL', 'List statements.'){|v| OPTS[:delete] =  v }
   opt.on('-n VAL', 'Statment name' ){ |v| OPTS[:name] = v}
+  opt.on('-c VAL', 'Create schema EPL filename' ){ |v| OPTS[:createschema] = v}
   opt.parse!
 }
 
@@ -21,6 +22,11 @@ elsif OPTS[:statement]
 elsif OPTS[:delete]
   puts OPTS[:delete]
   client.call(:removestatement, OPTS[:delete])
+elsif OPTS[:createschema]
+  puts OPTS[:createschema]
+  File.open(OPTS[:createschema]).readlines.each{|s|
+    client.call(:createschema, s)
+  }
 end
 ARGV.each{ |f|
   File.open(f).readlines.each{|q|

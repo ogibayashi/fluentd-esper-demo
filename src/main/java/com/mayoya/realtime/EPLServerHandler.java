@@ -81,6 +81,10 @@ public class EPLServerHandler {
 	request.sendResult(retStr);
     }
 
+    public void createschema(Request request, String eplString){
+	EPStatement statement = cepAdm.createEPL(eplString);
+	request.sendResult("schema created: " + statement.getName());
+    }
 
     public void create(Request request, String query, String name){
 	EPStatement statement = cepAdm.createEPL(query,name);
